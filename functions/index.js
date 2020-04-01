@@ -3,17 +3,32 @@ const app = require("express")();
 
 const FBAuth = require("./utils/fbAuth");
 
-const { getAllScreams, postOneScream } = require("./handlers/screams");
-const { signup, login, uploadImage } = require("./handlers/users");
+const {
+  getAllScreams,
+  postOneScream,
+  getScream,
+  commentOnScream
+} = require("./handlers/screams");
+
+const {
+  signup,
+  login,
+  uploadImage,
+  addUserDetails,
+  getAuthenticatedUser
+} = require("./handlers/users");
 
 /* Scream routes */
 app.get("/screams", getAllScreams);
-/* Post one scream */
 app.post("/scream", FBAuth, postOneScream);
+app.get("/scream/:screamId", getScream);
+app.post("/scream/:screamId/comment", FBAuth, commentOnScream);
 
 /* User routes */
 app.post("/signup", signup);
 app.post("/login", login);
 app.post("/user/image", FBAuth, uploadImage);
+app.post("/user", FBAuth, addUserDetails);
+app.get("/user", FBAuth, getAuthenticatedUser);
 
 exports.api = functions.https.onRequest(app);
